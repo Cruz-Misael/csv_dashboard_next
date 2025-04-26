@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import Papa from 'papaparse';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell,
@@ -8,6 +8,9 @@ import {
 import Image from 'next/image';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+
 
 const CurrencyDollarIcon = (props: any) => (
   <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -200,8 +203,24 @@ export default function DashboardPage() {
   const alturaPorItem = 60; // cada barra com ~50px
 
   const chartHeight = chartData.length * alturaPorItem;
-  
 
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(filteredData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "DadosXLSXS");
+  
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(data, 'dados.xlsx');
+  }; 
+
+  const [chartWidth, setChartWidth] = useState(500); 
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setChartWidth(window.innerWidth - 750);
+    }
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-gray-200">
@@ -278,16 +297,13 @@ export default function DashboardPage() {
               <input type="file" accept=".csv" onChange={handleFileUpload} className="hidden" id="csv-upload" />
               <label 
                 htmlFor="csv-upload" 
-                className="flex items-center gap-2 cursor-pointer text-sm px-4 py-2 bg-[#3c3c50] text-white rounded-lg hover:bg-[#3c3c50] transition-colors"
-              >
+                className="flex items-center gap-2 cursor-pointer text-sm px-4 py-2 bg-[#3c3c50] text-white rounded-lg transition-all duration-150 hover:bg-[#57576d] active:scale-95"
+                >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                 </svg>
                 Upload CSV
               </label>
-              <span className="absolute -bottom-6 left-0 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                Envie seu arquivo .csv
-              </span>
             </div>
 
             <div className="relative">
@@ -348,7 +364,7 @@ export default function DashboardPage() {
 
             <div className="h-[500px] overflow-y-auto scroll-smooth">
               <BarChart
-                width={window.innerWidth - 750}
+                width={chartWidth}
                 height={chartHeight}
                 data={chartData}
                 layout="vertical"
@@ -492,6 +508,12 @@ export default function DashboardPage() {
                   className="border border-gray-200 rounded px-2 py-1 text-sm w-24"
                 />
               </div>
+              <button 
+                onClick={exportToExcel}
+                className="flex items-center gap-2 cursor-pointer text-sm px-4 py-2 bg-green-500 text-white rounded-lg transition-all duration-150 hover:bg-green-600 active:scale-95"
+                >
+                Exportar Excel
+              </button>
               <span className="text-sm text-gray-500">{filteredData.length} itens</span>
             </div>
             
