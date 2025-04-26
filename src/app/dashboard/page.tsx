@@ -7,9 +7,10 @@ import {
 } from 'recharts';
 import Image from 'next/image';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Input } from '@/components/ui/input';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { useRouter } from 'next/navigation';
+
 
 
 const CurrencyDollarIcon = (props: any) => (
@@ -85,6 +86,15 @@ export default function DashboardPage() {
   const [selectedColumn, setSelectedColumn] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [modalImage, setModalImage] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Verificação simples ao carregar a página
+    const user = localStorage.getItem('user');
+    if (!user) {
+      router.push('/login');
+    }
+  }, [router]);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -274,6 +284,7 @@ export default function DashboardPage() {
             href="#" 
             className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm text-white/80 hover:bg-white/5 hover:text-orange-300 transition-all duration-200 group"
             >
+
             <span className="w-1.5 h-1.5 bg-orange-300 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
             <span>Diretório</span>
           </a>
