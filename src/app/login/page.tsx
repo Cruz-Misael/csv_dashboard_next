@@ -10,8 +10,8 @@ export default function LoginPage() {
   const router = useRouter();
 
   const handleLogin = () => {
-    const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || process.env.ADMIN_EMAIL;
-    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
+    const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
     
     if (email === adminEmail && password === adminPassword) {
       localStorage.setItem('user', email);
