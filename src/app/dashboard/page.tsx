@@ -227,8 +227,8 @@ export default function DashboardPage() {
       <aside className="fixed top-0 left-0 h-screen w-64 bg-[#3c3c50] text-white p-6 flex flex-col overflow-y-auto scroll-smooth">
         <div className="mb-8">
           <Image
-            src="/assets/Logo.png"
-            alt="Logo"
+            src="/assets/logo.png"
+            alt="logo"
             width={320}
             height={128}
             className="mx-auto h-28 w-64 object-cover object-center rounded-lg"
