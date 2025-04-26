@@ -23,12 +23,12 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar com Logo */}
+      {/* Sidebar com logo */}
       <aside className="w-64 bg-[#3c3c50] text-white p-6 flex flex-col">
         <div className="mb-8">
         <Image
-          src="/assets/Logo.png"
-          alt="Logo"
+          src="/assets/logo.png"
+          alt="logo"
           width={320} // opcional se usar `w-*`
           height={128} // opcional se usar `h-*`
           className="mx-auto h-28 w-64 object-cover object-center rounded-lg"
