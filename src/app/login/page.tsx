@@ -3,10 +3,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
-const users = {
-  'rubz.codeflow@gmail.com': 'SM135513$',
-};
-
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,7 +10,10 @@ export default function LoginPage() {
   const router = useRouter();
 
   const handleLogin = () => {
-    if (email in users && users[email as keyof typeof users] === password) {
+    const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || process.env.ADMIN_EMAIL;
+    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
+    
+    if (email === adminEmail && password === adminPassword) {
       localStorage.setItem('user', email);
       router.push('/dashboard');
     } else {
